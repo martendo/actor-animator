@@ -1,10 +1,10 @@
 "use strict";
 
-const PIXEL_SCALE = 6;
+let pixelScale = 6;
 
 const canvas = document.getElementById("canvas");
-canvas.width = 64 * PIXEL_SCALE;
-canvas.height = 64 * PIXEL_SCALE;
+canvas.width = 64 * pixelScale;
+canvas.height = 64 * pixelScale;
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 
@@ -17,19 +17,19 @@ let tileCanvases = [];
 const output = document.getElementById("output");
 
 gfxCanvas.addEventListener("mousemove", (event) => {
-  const x = Math.floor((event.clientX - gfxCanvas.offsetLeft) / PIXEL_SCALE / 8);
-  const y = Math.floor((event.clientY - gfxCanvas.offsetTop) / PIXEL_SCALE / 16);
+  const x = Math.floor((event.clientX - gfxCanvas.offsetLeft) / pixelScale / 8);
+  const y = Math.floor((event.clientY - gfxCanvas.offsetTop) / pixelScale / 16);
   drawGfx();
   gfxCtx.fillStyle = "#ffffff";
   gfxCtx.globalAlpha = 0.85;
-  gfxCtx.fillRect(x * 8 * PIXEL_SCALE, y * 16 * PIXEL_SCALE, 8 * PIXEL_SCALE, 16 * PIXEL_SCALE);
+  gfxCtx.fillRect(x * 8 * pixelScale, y * 16 * pixelScale, 8 * pixelScale, 16 * pixelScale);
   gfxCtx.fillStyle = "#000000";
   gfxCtx.globalAlpha = 1;
   gfxCtx.font = "20px monospace";
   gfxCtx.textAlign = "center";
   gfxCtx.fillText(
-    hexify((y * gfxCanvas.width / PIXEL_SCALE / 8 * 2 + x * 2 + offset) & 0xFF),
-    (x * 8 + 4) * PIXEL_SCALE, (y * 16 + 8) * PIXEL_SCALE,
+    hexify((y * gfxCanvas.width / pixelScale / 8 * 2 + x * 2 + offset) & 0xFF),
+    (x * 8 + 4) * pixelScale, (y * 16 + 8) * pixelScale,
   );
 });
 gfxCanvas.addEventListener("mouseleave", () => drawGfx());
@@ -63,6 +63,13 @@ offsetInput.addEventListener("input", () => {
   drawObjects();
 });
 offsetInput.value = 0;
+
+const scaleInput = document.getElementById("scaleInput");
+scaleInput.addEventListener("input", () => {
+  pixelScale = parseInt(scaleInput.value);
+  drawGfx();
+  drawObjects();
+});
 
 const objectTable = document.getElementById("objectTable");
 const objects = [];
@@ -200,8 +207,8 @@ function drawGfx() {
   if (!gfx) {
     return false;
   }
-  gfxCanvas.width = gfx.width * PIXEL_SCALE;
-  gfxCanvas.height = gfx.height * PIXEL_SCALE;
+  gfxCanvas.width = gfx.width * pixelScale;
+  gfxCanvas.height = gfx.height * pixelScale;
   gfxCtx.imageSmoothingEnabled = false;
   gfxCtx.drawImage(gfx, 0, 0, gfxCanvas.width, gfxCanvas.height);
   for (let y = 0; y < gfx.height / 16; y++) {
@@ -209,7 +216,7 @@ function drawGfx() {
       gfxCtx.strokeStyle = "#000000";
       gfxCtx.lineWidth = 1;
       gfxCtx.globalAlpha = 0.5;
-      gfxCtx.strokeRect(x * 8 * PIXEL_SCALE, y * 16 * PIXEL_SCALE, 8 * PIXEL_SCALE, 16 * PIXEL_SCALE);
+      gfxCtx.strokeRect(x * 8 * pixelScale, y * 16 * pixelScale, 8 * pixelScale, 16 * pixelScale);
       gfxCtx.globalAlpha = 1;
     }
   }
@@ -256,14 +263,14 @@ function drawObjects() {
     if (tileId < tileCanvases.length && tileId >= 0) {
       ctx.drawImage(
         tileCanvases[tileId],
-        object.x * PIXEL_SCALE, object.y * PIXEL_SCALE,
-        8 * PIXEL_SCALE, 16 * PIXEL_SCALE,
+        object.x * pixelScale, object.y * pixelScale,
+        8 * pixelScale, 16 * pixelScale,
       );
     } else {
       ctx.fillStyle = "#ff00ff";
       ctx.fillRect(
-        object.x * PIXEL_SCALE, object.y * PIXEL_SCALE,
-        8 * PIXEL_SCALE, 16 * PIXEL_SCALE,
+        object.x * pixelScale, object.y * pixelScale,
+        8 * pixelScale, 16 * pixelScale,
       );
     }
     ctx.strokeStyle = "#000000";
@@ -274,8 +281,8 @@ function drawObjects() {
     }
     ctx.globalAlpha = 0.5;
     ctx.strokeRect(
-      object.x * PIXEL_SCALE, object.y * PIXEL_SCALE,
-      8 * PIXEL_SCALE, 16 * PIXEL_SCALE,
+      object.x * pixelScale, object.y * pixelScale,
+      8 * pixelScale, 16 * pixelScale,
     );
     ctx.globalAlpha = 1;
   }
