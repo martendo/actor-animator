@@ -128,6 +128,7 @@ document.getElementById("exportButton").addEventListener("click", () => {
   for (const object of objects) {
     result += `    DB ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
   }
+  result += "    DB METASPRITE_END\n";
   output.textContent = result;
 });
 
