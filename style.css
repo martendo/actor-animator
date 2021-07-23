@@ -3,24 +3,23 @@
   image-rendering: optimizespeed;
   image-rendering: pixelated;
   margin: 0.25em;
-  font-size: 1em;
 }
 
-html, body {
-  padding: 0;
+body {
+  font-size: 1.125em;
 }
 
 canvas {
   border: 1px solid #000000;
 }
 
-h2, h3 {
-  font-size: 1em;
+table {
+  border-collapse: collapse;
 }
-
 td {
   vertical-align: top;
   border: 1px solid #c0c0c0;
+  padding: 0.25em;
 }
 
 #objectTableTable {
@@ -33,7 +32,4 @@ td.object {
 }
 td.object.current-object {
   background-color: #ffffc0;
-}
-#editBox {
-  text-align: right;
 }
