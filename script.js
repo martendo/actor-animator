@@ -40,8 +40,6 @@ input.addEventListener("change", () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   output.textContent = "";
   
-  console.log(input.files);
-  
   if (input.files.length !== 1) {
     return;
   }
@@ -54,6 +52,43 @@ input.addEventListener("change", () => {
   });
   img.src = url;
   URL.revokeObjectURL(url);
+});
+
+let bgEnabled = false;
+const bgEnable = document.getElementById("bgEnable");
+bgEnable.addEventListener("input", () => {
+  bgEnabled = bgEnable.checked;
+});
+
+let bg = null;
+const bgInput = document.getElementById("bgInput");
+bgInput.addEventListener("change", () => {
+  if (bgInput.files.length !== 1) {
+    return;
+  }
+  
+  const img = document.createElement("img");
+  const url = URL.createObjectURL(bgInput.files[0]);
+  img.addEventListener("load", () => {
+    bg = img;
+    bgEnabled = true;
+    drawObjects();
+  });
+  img.src = url;
+  URL.revokeObjectURL(url);
+});
+
+let bgX = 0;
+const bgXInput = document.getElementById("bgXInput");
+bgXInput.addEventListener("input", () => {
+  bgX = parseInt(bgXInput.value);
+  drawObjects();
+});
+let bgY = 0;
+const bgYInput = document.getElementById("bgYInput");
+bgYInput.addEventListener("input", () => {
+  bgY = parseInt(bgYInput.value);
+  drawObjects();
 });
 
 let offset = 0;
@@ -258,6 +293,11 @@ function createObjectTable() {
 function drawObjects() {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  if (bg && bgEnabled) {
+    ctx.drawImage(bg, bgX, bgY, bg.width * pixelScale, bg.height * pixelScale);
+  }
+  
   for (let i = 0; i < objects.length; i++) {
     const object = objects[i];
     const tileId = Math.floor((object.tile - offset) / 2);
