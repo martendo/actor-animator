@@ -29,7 +29,7 @@ gfxCanvas.addEventListener("mousemove", (event) => {
   gfxCtx.fillRect(x * 8 * pixelScale, y * 16 * pixelScale, 8 * pixelScale, 16 * pixelScale);
   gfxCtx.fillStyle = "#000000";
   gfxCtx.globalAlpha = 1;
-  gfxCtx.font = "20px monospace";
+  gfxCtx.font = (pixelScale * 3).toString().concat("px monospace");
   gfxCtx.textAlign = "center";
   gfxCtx.fillText(
     hexify((y * gfxCanvas.width / pixelScale / 8 * 2 + x * 2 + offset) & 0xFF),
