@@ -249,7 +249,8 @@ function createObjectTable() {
 function drawObjects() {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  for (const object of objects) {
+  for (let i = 0; i < objects.length; i++) {
+    const object = objects[i];
     const tileId = Math.floor((object.tile - offset) / 2);
     if (tileId < tileCanvases.length && tileId >= 0) {
       ctx.drawImage(
@@ -265,7 +266,11 @@ function drawObjects() {
       );
     }
     ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 1;
+    if (i == currentObject) {
+      ctx.lineWidth = 3;
+    } else {
+      ctx.lineWidth = 1;
+    }
     ctx.globalAlpha = 0.5;
     ctx.strokeRect(
       object.x * PIXEL_SCALE, object.y * PIXEL_SCALE,
