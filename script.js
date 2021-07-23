@@ -84,6 +84,14 @@ bgInput.addEventListener("change", () => {
   URL.revokeObjectURL(url);
 });
 
+let bgGridEnabled = false;
+const bgGridEnable = document.getElementById("bgGridEnable");
+bgGridEnable.addEventListener("input", () => {
+  bgGridEnabled = bgGridEnable.checked;
+  drawObjects();
+});
+bgGridEnable.checked = false;
+
 let bgX = 0;
 const bgXInput = document.getElementById("bgXInput");
 bgXInput.addEventListener("input", () => {
@@ -304,8 +312,19 @@ function drawObjects() {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  if (bg && bgEnabled) {
-    ctx.drawImage(bg, bgX, bgY, bg.width * pixelScale, bg.height * pixelScale);
+  if (bgEnabled) {
+    if (bg) {
+      ctx.drawImage(bg, bgX, bgY, bg.width * pixelScale, bg.height * pixelScale);
+    }
+    if (bgGridEnabled) {
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 0.5;
+      for (let y = 0; y < canvas.height / pixelScale / 8; y++) {
+        for (let x = 0; x < canvas.width / pixelScale / 8; x++) {
+          ctx.strokeRect(x * 8 * pixelScale, y * 8 * pixelScale, 8 * pixelScale, 8 * pixelScale);
+        }
+      }
+    }
   }
   
   for (let i = 0; i < objects.length; i++) {
