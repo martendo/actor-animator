@@ -61,7 +61,9 @@ let bgEnabled = false;
 const bgEnable = document.getElementById("bgEnable");
 bgEnable.addEventListener("input", () => {
   bgEnabled = bgEnable.checked;
+  drawObjects();
 });
+bgEnable.checked = false;
 
 let bg = null;
 const bgInput = document.getElementById("bgInput");
@@ -75,6 +77,7 @@ bgInput.addEventListener("change", () => {
   img.addEventListener("load", () => {
     bg = img;
     bgEnabled = true;
+    bgEnable.checked = true;
     drawObjects();
   });
   img.src = url;
