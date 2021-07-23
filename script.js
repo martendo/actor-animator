@@ -324,17 +324,15 @@ function drawObjects() {
         8 * pixelScale, 16 * pixelScale,
       );
     }
-    ctx.strokeStyle = "#000000";
+    ctx.strokeStyle = "#ff0000";
     if (i == currentObject) {
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2;
     } else {
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 0.5;
     }
-    ctx.globalAlpha = 0.5;
     ctx.strokeRect(
       object.x * pixelScale, object.y * pixelScale,
       8 * pixelScale, 16 * pixelScale,
     );
-    ctx.globalAlpha = 1;
   }
 }
