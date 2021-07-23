@@ -20,8 +20,9 @@ let tileCanvases = [];
 const output = document.getElementById("output");
 
 gfxCanvas.addEventListener("mousemove", (event) => {
-  const x = Math.floor((event.clientX - gfxCanvas.offsetLeft) / pixelScale / 8);
-  const y = Math.floor((event.clientY - gfxCanvas.offsetTop) / pixelScale / 16);
+  const rect = gfxCanvas.getBoundingClientRect();
+  const x = Math.floor((event.clientX - rect.x) / pixelScale / 8);
+  const y = Math.floor((event.clientY - rect.y) / pixelScale / 16);
   drawGfx();
   gfxCtx.fillStyle = "#ffffff";
   gfxCtx.globalAlpha = 0.85;
@@ -177,6 +178,43 @@ document.getElementById("removeBtn").addEventListener("click", () => {
     newCurrentObject = currentObject - 1;
   }
   setCurrentObject(newCurrentObject);
+  drawObjects();
+});
+
+let dragObject = null;
+let dragX = 0;
+let dragY = 0;
+canvas.addEventListener("mousedown", (event) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.floor((event.clientX - rect.x) / pixelScale);
+  const y = Math.floor((event.clientY - rect.y) / pixelScale);
+  for (let i = 0; i < objects.length; i++) {
+    const object = objects[i];
+    if (object.x < x && x < object.x + 8 && object.y < y && y < object.y + 16) {
+      setCurrentObject(i);
+      dragObject = i;
+      dragX = x - object.x;
+      dragY = y - object.y;
+      break;
+    }
+  }
+});
+canvas.addEventListener("mouseup", () => {
+  dragObject = null;
+});
+document.addEventListener("mousemove", (event) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.floor((event.clientX - rect.x) / pixelScale);
+  const y = Math.floor((event.clientY - rect.y) / pixelScale);
+  if (dragObject == null) {
+    return;
+  }
+  const object = objects[dragObject];
+  object.x = x - dragX;
+  object.y = y - dragY;
+  document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
+  xInput.value = object.x;
+  yInput.value = object.y;
   drawObjects();
 });
 
