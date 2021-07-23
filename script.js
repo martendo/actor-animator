@@ -1,10 +1,13 @@
 "use strict";
 
+const SCRN_X = 160;
+const SCRN_Y = 144;
+
 let pixelScale = 4;
 
 const canvas = document.getElementById("canvas");
-canvas.width = 64 * pixelScale;
-canvas.height = 64 * pixelScale;
+canvas.width = SCRN_X * pixelScale;
+canvas.height = SCRN_Y * pixelScale;
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 
