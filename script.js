@@ -294,6 +294,10 @@ function createObjectTable() {
 }
 
 function drawObjects() {
+  canvas.width = SCRN_X * pixelScale;
+  canvas.height = SCRN_Y * pixelScale;
+  ctx.imageSmoothingEnabled = false;
+  
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
