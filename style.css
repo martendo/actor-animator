@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+  image-rendering: optimizespeed;
+  image-rendering: pixelated;
+  margin: 0.25em;
+  font-size: 1em;
+}
+
+html, body {
+  padding: 0;
+}
+
+canvas {
+  border: 1px solid #000000;
+}
+
+h2, h3 {
+  font-size: 1em;
+}
+
+td {
+  vertical-align: top;
+  border: 1px solid #c0c0c0;
+}
+
+#objectTableTable {
+  width: 10em;
+}
+td.object {
+  font-family: monospace;
+  font-size: 1.25em;
+  padding: 0.5em;
+}
+td.object.current-object {
+  background-color: #ffffc0;
+}
+#editBox {
+  text-align: right;
+}

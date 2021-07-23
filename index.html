@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Rhythm Land Actor Animator</title>
+    
+    <meta name="title" content="Rhythm Land Actor Animator">
+    <meta name="author" content="martendo">
+    
+    <meta property="og:title" content="Rhythm Land Actor Animator">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div>
+      <label for="imgInput">Actor tiles upload:</label>
+      <input type="file" id="imgInput" accept="image/png">
+      <label for="offsetInput">Tile number offset:</label>
+      <input type="number" id="offsetInput" min="-256" max="255" step="2">
+    </div>
+    <hr>
+    <div>
+      <h2>Tiles</h2>
+      <canvas id="gfxCanvas">HTML canvas is not supported :(</canvas>
+    </div>
+    <div>
+      <h2>Meta-Sprite</h2>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <canvas id="canvas">HTML canvas is not supported :(</canvas>
+            </td>
+            <td>
+              <table id="objectTableTable">
+                <tbody id="objectTable"></tbody>
+              </table>
+              <button id="addBtn">Add Object</button>
+            </td>
+            <td id="editBox">
+              <h3>Edit Currently Selected Object</h3>
+              <div>
+                <label for="xInput">x</label>
+                <input type="number" id="xInput" min="-128" max="127" step="1">
+              </div>
+              <div>
+                <label for="yInput">y</label>
+                <input type="number" id="yInput" min="-127" max="127" step="1">
+              </div>
+              <div>
+                <label for="tileInput">tile</label>
+                <input type="number" id="tileInput" min="0" max="255" step="2">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr>
+    <div>
+      <button id="exportButton">Export Data</button>
+      <br>
+      <textarea id="output" placeholder="Output will show up here." readonly></textarea>
+    </div>
+    <script src="script.js" type="text/javascript" charset="utf-8"></script>
+  </body>
+</html>
