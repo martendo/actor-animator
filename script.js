@@ -1,6 +1,6 @@
 "use strict";
 
-let pixelScale = 6;
+let pixelScale = 4;
 
 const canvas = document.getElementById("canvas");
 canvas.width = 64 * pixelScale;
@@ -70,6 +70,7 @@ scaleInput.addEventListener("input", () => {
   drawGfx();
   drawObjects();
 });
+scaleInput.value = pixelScale;
 
 const objectTable = document.getElementById("objectTable");
 const objects = [];
