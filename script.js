@@ -105,22 +105,21 @@ document.getElementById("addBtn").addEventListener("click", () => {
     y: 0,
     tile: 0,
   });
-  
-  while (objectTable.firstChild) {
-    objectTable.removeChild(objectTable.firstChild);
-  }
-  
-  for (let i = 0; i < objects.length; i++) {
-    const object = objects[i];
-    const row = objectTable.insertRow(-1);
-    const cell = row.insertCell(0);
-    cell.classList.add("object");
-    cell.id = "object".concat(i);
-    cell.addEventListener("click", () => setCurrentObject(i));
-    cell.textContent = objectTextify(object);
-  }
+  createObjectTable();
   setCurrentObject(objects.length - 1);
-  
+  drawObjects();
+});
+document.getElementById("removeBtn").addEventListener("click", () => {
+  if (currentObject == null) {
+    return;
+  }
+  objects.splice(currentObject, 1);
+  createObjectTable();
+  let newCurrentObject = null;
+  if (currentObject - 1 >= 0) {
+    newCurrentObject = currentObject - 1;
+  }
+  setCurrentObject(newCurrentObject);
   drawObjects();
 });
 
@@ -216,15 +215,35 @@ function drawGfx() {
 }
 
 function setCurrentObject(num) {
-  if (currentObject != null) {
-    document.getElementById("object".concat(currentObject)).classList.remove("current-object");
+  const oldCurrentObject = document.getElementById("object".concat(currentObject));
+  if (oldCurrentObject) {
+    oldCurrentObject.classList.remove("current-object");
   }
   currentObject = num;
+  if (currentObject == null) {
+    return;
+  }
   document.getElementById("object".concat(currentObject)).classList.add("current-object");
   const object = objects[num];
   xInput.value = object.x;
   yInput.value = object.y;
   tileInput.value = object.tile + offset;
+}
+
+function createObjectTable() {
+  while (objectTable.firstChild) {
+    objectTable.removeChild(objectTable.firstChild);
+  }
+  
+  for (let i = 0; i < objects.length; i++) {
+    const object = objects[i];
+    const row = objectTable.insertRow(-1);
+    const cell = row.insertCell(0);
+    cell.classList.add("object");
+    cell.id = "object".concat(i);
+    cell.addEventListener("click", () => setCurrentObject(i));
+    cell.textContent = objectTextify(object);
+  }
 }
 
 function drawObjects() {
