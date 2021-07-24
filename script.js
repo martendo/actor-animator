@@ -53,6 +53,7 @@ input.addEventListener("change", () => {
   img.addEventListener("load", () => {
     gfx = dedupGfx(img);
     drawGfx();
+    drawObjects();
   });
   img.src = url;
   URL.revokeObjectURL(url);
@@ -122,6 +123,21 @@ scaleInput.addEventListener("input", () => {
 });
 scaleInput.value = pixelScale;
 
+let actorX = 0;
+const actorXInput = document.getElementById("actorXInput");
+actorXInput.addEventListener("input", () => {
+  actorX = parseInt(actorXInput.value);
+  drawObjects();
+});
+actorXInput.value = 0;
+let actorY = 0;
+const actorYInput = document.getElementById("actorYInput");
+actorYInput.addEventListener("input", () => {
+  actorY = parseInt(actorYInput.value);
+  drawObjects();
+});
+actorYInput.value = 0;
+
 const objectTable = document.getElementById("objectTable");
 const objects = [];
 let currentObject = null;
@@ -186,8 +202,8 @@ let dragX = 0;
 let dragY = 0;
 canvas.addEventListener("mousedown", (event) => {
   const rect = canvas.getBoundingClientRect();
-  const x = Math.floor((event.clientX - rect.x) / pixelScale);
-  const y = Math.floor((event.clientY - rect.y) / pixelScale);
+  const x = Math.floor((event.clientX - rect.x) / pixelScale) - actorX;
+  const y = Math.floor((event.clientY - rect.y) / pixelScale) - actorY;
   for (let i = 0; i < objects.length; i++) {
     const object = objects[i];
     if (object.x < x && x < object.x + 8 && object.y < y && y < object.y + 16) {
@@ -204,8 +220,8 @@ canvas.addEventListener("mouseup", () => {
 });
 document.addEventListener("mousemove", (event) => {
   const rect = canvas.getBoundingClientRect();
-  const x = Math.floor((event.clientX - rect.x) / pixelScale);
-  const y = Math.floor((event.clientY - rect.y) / pixelScale);
+  const x = Math.floor((event.clientX - rect.x) / pixelScale) - actorX;
+  const y = Math.floor((event.clientY - rect.y) / pixelScale) - actorY;
   if (dragObject == null) {
     return;
   }
@@ -373,13 +389,15 @@ function drawObjects() {
     if (tileId < tileCanvases.length && tileId >= 0) {
       ctx.drawImage(
         tileCanvases[tileId],
-        object.x * pixelScale, object.y * pixelScale,
+        (object.x + actorX) * pixelScale,
+        (object.y + actorY) * pixelScale,
         8 * pixelScale, 16 * pixelScale,
       );
     } else {
       ctx.fillStyle = "#ff00ff";
       ctx.fillRect(
-        object.x * pixelScale, object.y * pixelScale,
+        (object.x + actorX) * pixelScale,
+        (object.y + actorY) * pixelScale,
         8 * pixelScale, 16 * pixelScale,
       );
     }
@@ -390,8 +408,24 @@ function drawObjects() {
       ctx.lineWidth = 0.5;
     }
     ctx.strokeRect(
-      object.x * pixelScale, object.y * pixelScale,
+      (object.x + actorX) * pixelScale,
+      (object.y + actorY) * pixelScale,
       8 * pixelScale, 16 * pixelScale,
     );
   }
+  
+  ctx.strokeStyle = "#ff8000";
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.25;
+  ctx.beginPath();
+  ctx.moveTo(actorX * pixelScale, 0);
+  ctx.lineTo(actorX * pixelScale, canvas.height);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0, actorY * pixelScale);
+  ctx.lineTo(canvas.width, actorY * pixelScale);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = "#0000ff";
+  ctx.fillRect(actorX * pixelScale - 2, actorY * pixelScale - 2, 3, 3);
 }
