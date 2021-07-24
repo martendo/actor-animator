@@ -358,7 +358,11 @@ function drawObjects() {
     ctx.lineWidth = 0.5;
     for (let y = 0; y < canvas.height / pixelScale / 8; y++) {
       for (let x = 0; x < canvas.width / pixelScale / 8; x++) {
-        ctx.strokeRect(x * 8 * pixelScale, y * 8 * pixelScale, 8 * pixelScale, 8 * pixelScale);
+        ctx.strokeRect(
+          (x * 8 + bgX) * pixelScale,
+          (y * 8 + bgY) * pixelScale,
+          8 * pixelScale, 8 * pixelScale,
+        );
       }
     }
   }
