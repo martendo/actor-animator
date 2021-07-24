@@ -243,7 +243,18 @@ document.addEventListener("mousemove", (event) => {
 
 document.getElementById("exportButton").addEventListener("click", () => {
   let result = "";
-  for (const object of objects) {
+  for (let i = 0; i < objects.length; i++) {
+    const object = objects[i];
+    if (object.y === -128 || object.y === 128) {
+      window.alert(`Object ${i} has an invalid Y position of ${object.y} (value is reserved for METASPRITE_END)`);
+      return;
+    } else if (object.x < -128 || object.x >= 256) {
+      window.alert(`Object ${i}'s X position is not 8-bit (expected -128 <= ${object.x} < 256)`);
+      return;
+    } else if (object.y < -128 || object.y >= 256) {
+      window.alert(`Object ${i}'s Y position is not 8-bit (expected -128 <= ${object.y} < 256)`);
+      return;
+    }
     result += `    DB ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
   }
   result += "    DB METASPRITE_END\n";
