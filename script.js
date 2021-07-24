@@ -222,7 +222,7 @@ canvas.addEventListener("mousedown", (event) => {
     }
   }
 });
-canvas.addEventListener("mouseup", () => {
+document.addEventListener("mouseup", () => {
   dragObject = null;
 });
 document.addEventListener("mousemove", (event) => {
