@@ -58,6 +58,7 @@ input.addEventListener("change", () => {
   img.src = url;
   URL.revokeObjectURL(url);
 });
+input.value = "";
 
 let bgEnabled = false;
 const bgEnable = document.getElementById("bgEnable");
@@ -65,7 +66,7 @@ bgEnable.addEventListener("input", () => {
   bgEnabled = bgEnable.checked;
   drawObjects();
 });
-bgEnable.checked = false;
+bgEnable.checked = bgEnabled;
 
 let bg = null;
 const bgInput = document.getElementById("bgInput");
@@ -85,6 +86,7 @@ bgInput.addEventListener("change", () => {
   img.src = url;
   URL.revokeObjectURL(url);
 });
+bgInput.value = "";
 
 let gridEnabled = false;
 const gridEnable = document.getElementById("gridEnable");
@@ -92,7 +94,7 @@ gridEnable.addEventListener("input", () => {
   gridEnabled = gridEnable.checked;
   drawObjects();
 });
-gridEnable.checked = false;
+gridEnable.checked = gridEnabled;
 
 let bgX = 0;
 const bgXInput = document.getElementById("bgXInput");
@@ -100,12 +102,14 @@ bgXInput.addEventListener("input", () => {
   bgX = parseInt(bgXInput.value);
   drawObjects();
 });
+bgXInput.value = bgX;
 let bgY = 0;
 const bgYInput = document.getElementById("bgYInput");
 bgYInput.addEventListener("input", () => {
   bgY = parseInt(bgYInput.value);
   drawObjects();
 });
+bgYInput.value = bgY;
 
 let offset = 0;
 const offsetInput = document.getElementById("offsetInput");
@@ -113,7 +117,7 @@ offsetInput.addEventListener("input", () => {
   offset = parseInt(offsetInput.value);
   drawObjects();
 });
-offsetInput.value = 0;
+offsetInput.value = offset;
 
 const scaleInput = document.getElementById("scaleInput");
 scaleInput.addEventListener("input", () => {
@@ -129,14 +133,14 @@ actorXInput.addEventListener("input", () => {
   actorX = parseInt(actorXInput.value);
   drawObjects();
 });
-actorXInput.value = 0;
+actorXInput.value = actorX;
 let actorY = 0;
 const actorYInput = document.getElementById("actorYInput");
 actorYInput.addEventListener("input", () => {
   actorY = parseInt(actorYInput.value);
   drawObjects();
 });
-actorYInput.value = 0;
+actorYInput.value = actorY;
 
 const objectTable = document.getElementById("objectTable");
 const objects = [];
@@ -152,6 +156,7 @@ xInput.addEventListener("input", () => {
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
   drawObjects();
 });
+xInput.value = 0;
 const yInput = document.getElementById("yInput");
 yInput.addEventListener("input", () => {
   if (currentObject == null) {
@@ -162,6 +167,7 @@ yInput.addEventListener("input", () => {
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
   drawObjects();
 });
+yInput.value = 0;
 const tileInput = document.getElementById("tileInput");
 tileInput.addEventListener("input", () => {
   if (currentObject == null) {
@@ -172,6 +178,7 @@ tileInput.addEventListener("input", () => {
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
   drawObjects();
 });
+tileInput.value = 0;
 
 document.getElementById("addBtn").addEventListener("click", () => {
   objects.push({
