@@ -254,6 +254,9 @@ document.getElementById("exportButton").addEventListener("click", () => {
     } else if (object.y < -128 || object.y >= 256) {
       window.alert(`Object ${i}'s Y position is not 8-bit (expected -128 <= ${object.y} < 256)`);
       return;
+    } else if (object.tile < -128 || object.tile >= 256) {
+      window.alert(`Object ${i}'s tile number is not 8-bit (expected -128 <= ${object.y} < 256)`);
+      return;
     }
     result += `    DB ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
   }
