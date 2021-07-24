@@ -351,7 +351,7 @@ function drawObjects() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   if (bg && bgEnabled) {
-    ctx.drawImage(bg, bgX, bgY, bg.width * pixelScale, bg.height * pixelScale);
+    ctx.drawImage(bg, bgX * pixelScale, bgY * pixelScale, bg.width * pixelScale, bg.height * pixelScale);
   }
   if (gridEnabled) {
     ctx.strokeStyle = "#000000";
