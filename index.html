@@ -28,7 +28,7 @@
       <canvas id="gfxCanvas">HTML canvas is not supported :(</canvas>
     </div>
     <div>
-      <h2>Meta-Sprite</h2>
+      <h2>Meta-Sprites</h2>
       <label for="bgInput">Background image:</label>
       <input type="file" id="bgInput" accept="image/png">
       <label for="bgEnable">Background enable:</label>
@@ -52,8 +52,18 @@
               <canvas id="canvas">HTML canvas is not supported :(</canvas>
             </td>
             <td>
+              <h3>Meta-Sprites</h3>
+              <label for="nameInput">Current Meta-Sprite Name</label>
+              <input type="text" id="nameInput">
+              <table class="table">
+                <tbody id="metaspriteTable"></tbody>
+              </table>
+              <button id="addMsBtn">New Meta-Sprite</button>
+              <button id="removeMsBtn">Remove Meta-Sprite</button>
+            </td>
+            <td>
               <h3>Objects</h3>
-              <table id="objectTableTable">
+              <table class="table">
                 <tbody id="objectTable"></tbody>
               </table>
               <button id="addBtn">New Object</button>

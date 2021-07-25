@@ -142,8 +142,42 @@ actorYInput.addEventListener("input", () => {
 });
 actorYInput.value = actorY;
 
+const metaspriteTable = document.getElementById("metaspriteTable");
+const metasprites = [];
+let currentMetasprite = null;
+
+const nameInput = document.getElementById("nameInput");
+nameInput.addEventListener("input", () => {
+  metasprites[currentMetasprite].name = nameInput.value;
+  createMetaspriteTable();
+});
+nameInput.value = "";
+
+document.getElementById("addMsBtn").addEventListener("click", () => {
+  metasprites.push({
+    name: "noname".concat(metasprites.length + 1),
+    objects: [],
+  });
+  createMetaspriteTable();
+  setCurrentMetasprite(metasprites.length - 1);
+  createObjectTable();
+  drawObjects();
+});
+document.getElementById("removeMsBtn").addEventListener("click", () => {
+  if (currentMetasprite == null) {
+    return;
+  }
+  metasprites.splice(currentMetasprite, 1);
+  let newCurrentMetasprite = null;
+  if (currentMetasprite - 1 >= 0) {
+    newCurrentMetasprite = currentMetasprite - 1;
+  }
+  setCurrentMetasprite(newCurrentMetasprite);
+  createMetaspriteTable();
+  drawObjects();
+});
+
 const objectTable = document.getElementById("objectTable");
-const objects = [];
 let currentObject = null;
 
 const xInput = document.getElementById("xInput");
@@ -151,7 +185,7 @@ xInput.addEventListener("input", () => {
   if (currentObject == null) {
     return;
   }
-  const object = objects[currentObject];
+  const object = metasprites[currentMetasprite].objects[currentObject];
   object.x = parseInt(xInput.value);
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
   drawObjects();
@@ -162,7 +196,7 @@ yInput.addEventListener("input", () => {
   if (currentObject == null) {
     return;
   }
-  const object = objects[currentObject];
+  const object = metasprites[currentMetasprite].objects[currentObject];
   object.y = parseInt(yInput.value);
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
   drawObjects();
@@ -173,7 +207,7 @@ tileInput.addEventListener("input", () => {
   if (currentObject == null) {
     return;
   }
-  const object = objects[currentObject];
+  const object = metasprites[currentMetasprite].objects[currentObject];
   object.tile = parseInt(tileInput.value);
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
   drawObjects();
@@ -181,25 +215,28 @@ tileInput.addEventListener("input", () => {
 tileInput.value = 0;
 
 document.getElementById("addBtn").addEventListener("click", () => {
-  objects.push({
+  if (currentMetasprite == null) {
+    return;
+  }
+  metasprites[currentMetasprite].objects.push({
     x: 0,
     y: 0,
     tile: 0,
   });
   createObjectTable();
-  setCurrentObject(objects.length - 1);
+  setCurrentObject(metasprites[currentMetasprite].objects.length - 1);
   drawObjects();
 });
 document.getElementById("removeBtn").addEventListener("click", () => {
-  if (currentObject == null) {
+  if (currentMetasprite == null || currentObject == null) {
     return;
   }
-  objects.splice(currentObject, 1);
-  createObjectTable();
+  metasprites[currentMetasprite].objects.splice(currentObject, 1);
   let newCurrentObject = null;
   if (currentObject - 1 >= 0) {
     newCurrentObject = currentObject - 1;
   }
+  createObjectTable();
   setCurrentObject(newCurrentObject);
   drawObjects();
 });
@@ -211,8 +248,8 @@ canvas.addEventListener("mousedown", (event) => {
   const rect = canvas.getBoundingClientRect();
   const x = Math.floor((event.clientX - rect.x) / pixelScale) - actorX;
   const y = Math.floor((event.clientY - rect.y) / pixelScale) - actorY;
-  for (let i = 0; i < objects.length; i++) {
-    const object = objects[i];
+  for (let i = 0; i < metasprites[currentMetasprite].objects.length; i++) {
+    const object = metasprites[currentMetasprite].objects[i];
     if (object.x < x && x < object.x + 8 && object.y < y && y < object.y + 16) {
       setCurrentObject(i);
       dragObject = i;
@@ -232,7 +269,7 @@ document.addEventListener("mousemove", (event) => {
   if (dragObject == null) {
     return;
   }
-  const object = objects[dragObject];
+  const object = metasprites[currentMetasprite].objects[dragObject];
   object.x = x - dragX;
   object.y = y - dragY;
   document.getElementById("object".concat(currentObject)).textContent = objectTextify(object);
@@ -243,24 +280,31 @@ document.addEventListener("mousemove", (event) => {
 
 document.getElementById("exportButton").addEventListener("click", () => {
   let result = "";
-  for (let i = 0; i < objects.length; i++) {
-    const object = objects[i];
-    if (object.y === -128 || object.y === 128) {
-      window.alert(`Object ${i} has an invalid Y position of ${object.y} (value is reserved for METASPRITE_END)`);
-      return;
-    } else if (object.x < -128 || object.x >= 256) {
-      window.alert(`Object ${i}'s X position is not 8-bit (expected -128 <= ${object.x} < 256)`);
-      return;
-    } else if (object.y < -128 || object.y >= 256) {
-      window.alert(`Object ${i}'s Y position is not 8-bit (expected -128 <= ${object.y} < 256)`);
-      return;
-    } else if (object.tile < -128 || object.tile >= 256) {
-      window.alert(`Object ${i}'s tile number is not 8-bit (expected -128 <= ${object.y} < 256)`);
-      return;
-    }
-    result += `    DB ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
+  for (const metasprite of metasprites) {
+    result += "    metasprite .".concat(metasprite.name).concat("\n");
   }
-  result += "    DB METASPRITE_END\n";
+  result += "\n";
+  for (const metasprite of metasprites) {
+    result += ".".concat(metasprite.name).concat("\n");
+    for (let i = 0; i < metasprite.objects.length; i++) {
+      const object = metasprite.objects[i];
+      if (object.y === -128 || object.y === 128) {
+        window.alert(`Object ${i} of meta-sprite "${metasprite.name}" has an invalid Y position of ${object.y} (value is reserved for METASPRITE_END)`);
+        return;
+      } else if (object.x < -128 || object.x >= 256) {
+        window.alert(`Object ${i} of meta-sprite "${metasprite.name}"'s X position is not 8-bit (expected -128 <= ${object.x} < 256)`);
+        return;
+      } else if (object.y < -128 || object.y >= 256) {
+        window.alert(`Object ${i} of meta-sprite "${metasprite.name}"'s Y position is not 8-bit (expected -128 <= ${object.y} < 256)`);
+        return;
+      } else if (object.tile < -128 || object.tile >= 256) {
+        window.alert(`Object ${i} of meta-sprite "${metasprite.name}"'s tile number is not 8-bit (expected -128 <= ${object.y} < 256)`);
+        return;
+      }
+      result += `    DB ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
+    }
+    result += "    DB METASPRITE_END\n";
+  }
   output.textContent = result;
 });
 
@@ -347,17 +391,54 @@ function drawGfx() {
   }
 }
 
+function setCurrentMetasprite(num) {
+  const oldCurrentMetasprite = document.getElementById("metasprite".concat(currentMetasprite));
+  if (oldCurrentMetasprite) {
+    oldCurrentMetasprite.classList.remove("currentMetasprite");
+  }
+  currentMetasprite = num;
+  currentObject = null;
+  if (currentMetasprite == null) {
+    return;
+  }
+  document.getElementById("metasprite".concat(currentMetasprite)).classList.add("currentMetasprite");
+  nameInput.value = metasprites[currentMetasprite].name;
+}
+
+function createMetaspriteTable() {
+  while (metaspriteTable.firstChild) {
+    metaspriteTable.removeChild(metaspriteTable.firstChild);
+  }
+  
+  for (let i = 0; i < metasprites.length; i++) {
+    const row = metaspriteTable.insertRow(-1);
+    const cell = row.insertCell(0);
+    cell.classList.add("metasprite");
+    cell.id = "metasprite".concat(i);
+    cell.addEventListener("click", () => {
+      setCurrentMetasprite(i);
+      createObjectTable();
+      drawObjects();
+    });
+    cell.textContent = metasprites[i].name;
+  }
+  if (currentMetasprite != null) {
+    document.getElementById("metasprite".concat(currentMetasprite)).classList.add("currentMetasprite");
+  }
+  createObjectTable();
+}
+
 function setCurrentObject(num) {
   const oldCurrentObject = document.getElementById("object".concat(currentObject));
   if (oldCurrentObject) {
-    oldCurrentObject.classList.remove("current-object");
+    oldCurrentObject.classList.remove("currentObject");
   }
   currentObject = num;
   if (currentObject == null) {
     return;
   }
-  document.getElementById("object".concat(currentObject)).classList.add("current-object");
-  const object = objects[num];
+  document.getElementById("object".concat(currentObject)).classList.add("currentObject");
+  const object = metasprites[currentMetasprite].objects[num];
   xInput.value = object.x;
   yInput.value = object.y;
   tileInput.value = object.tile + offset;
@@ -368,14 +449,21 @@ function createObjectTable() {
     objectTable.removeChild(objectTable.firstChild);
   }
   
-  for (let i = 0; i < objects.length; i++) {
-    const object = objects[i];
+  if (currentMetasprite == null) {
+    return;
+  }
+  
+  for (let i = 0; i < metasprites[currentMetasprite].objects.length; i++) {
+    const object = metasprites[currentMetasprite].objects[i];
     const row = objectTable.insertRow(-1);
     const cell = row.insertCell(0);
     cell.classList.add("object");
     cell.id = "object".concat(i);
     cell.addEventListener("click", () => setCurrentObject(i));
     cell.textContent = objectTextify(object);
+  }
+  if (currentObject != null) {
+    document.getElementById("object".concat(currentObject)).classList.add("currentObject");
   }
 }
 
@@ -404,8 +492,12 @@ function drawObjects() {
     }
   }
   
-  for (let i = 0; i < objects.length; i++) {
-    const object = objects[i];
+  if (currentMetasprite == null) {
+    return;
+  }
+  
+  for (let i = 0; i < metasprites[currentMetasprite].objects.length; i++) {
+    const object = metasprites[currentMetasprite].objects[i];
     const tileId = Math.floor((object.tile - offset) / 2);
     if (tileId < tileCanvases.length && tileId >= 0) {
       ctx.drawImage(

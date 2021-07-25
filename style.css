@@ -22,14 +22,17 @@ td {
   padding: 0.25em;
 }
 
-#objectTableTable {
+.table {
   width: 10em;
 }
-td.object {
+td.object, td.metasprite {
   font-family: monospace;
   font-size: 1.25em;
   padding: 0.5em;
 }
-td.object.current-object {
+td.object.currentObject {
   background-color: #ffffc0;
+}
+td.metasprite.currentMetasprite {
+  background-color: #ffe0c0;
 }
