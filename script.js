@@ -278,6 +278,7 @@ document.getElementById("upBtn").addEventListener("click", () => {
   objects.splice(newPos, 0, objects.splice(currentObject, 1)[0]);
   createObjectTable();
   setCurrentObject(newPos);
+  drawObjects();
 });
 document.getElementById("downBtn").addEventListener("click", () => {
   if (currentMetasprite == null || currentObject == null) {
@@ -291,6 +292,7 @@ document.getElementById("downBtn").addEventListener("click", () => {
   objects.splice(newPos, 0, objects.splice(currentObject, 1)[0]);
   createObjectTable();
   setCurrentObject(newPos);
+  drawObjects();
 });
 
 let dragObject = null;
@@ -300,12 +302,14 @@ canvas.addEventListener("mousedown", (event) => {
   const rect = canvas.getBoundingClientRect();
   const x = Math.floor((event.clientX - rect.x) / pixelScale) - actorX;
   const y = Math.floor((event.clientY - rect.y) / pixelScale) - actorY;
-  for (let i = 0; i < metasprites[currentMetasprite].objects.length; i++) {
-    const object = metasprites[currentMetasprite].objects[i];
+  const objects = getObjectsOrdered();
+  for (let i = 0; i < objects.length; i++) {
+    const object = objects[i][0];
+    const num = objects[i][1];
     if (object.x < x && x < object.x + 8 && object.y < y && y < object.y + 16) {
-      setCurrentObject(i);
+      setCurrentObject(num);
       drawObjects();
-      dragObject = i;
+      dragObject = num;
       dragX = x - object.x;
       dragY = y - object.y;
       break;
@@ -520,6 +524,12 @@ function createObjectTable() {
   }
 }
 
+function getObjectsOrdered() {
+  return metasprites[currentMetasprite].objects.slice()
+    .map((object, i) => [object, i])
+    .sort((a, b) => a[0].x - b[0].x);
+}
+
 function drawObjects() {
   canvas.width = SCRN_X * pixelScale;
   canvas.height = SCRN_Y * pixelScale;
@@ -549,8 +559,9 @@ function drawObjects() {
     return;
   }
   
-  for (let i = 0; i < metasprites[currentMetasprite].objects.length; i++) {
-    const object = metasprites[currentMetasprite].objects[i];
+  const objects = getObjectsOrdered();
+  for (let i = 0; i < objects.length; i++) {
+    const object = objects[i][0];
     const tileId = Math.floor((object.tile - offset) / 2);
     if (tileId < tileCanvases.length && tileId >= 0) {
       ctx.drawImage(
@@ -568,7 +579,7 @@ function drawObjects() {
       );
     }
     ctx.strokeStyle = "#ff0000";
-    if (i == currentObject) {
+    if (objects[i][1] == currentObject) {
       ctx.lineWidth = 2;
     } else {
       ctx.lineWidth = 0.5;
