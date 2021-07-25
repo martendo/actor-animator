@@ -303,7 +303,7 @@ canvas.addEventListener("mousedown", (event) => {
   const x = Math.floor((event.clientX - rect.x) / pixelScale) - actorX;
   const y = Math.floor((event.clientY - rect.y) / pixelScale) - actorY;
   const objects = getObjectsOrdered();
-  for (let i = 0; i < objects.length; i++) {
+  for (let i = objects.length - 1; i >= 0; i--) {
     const object = objects[i][0];
     const num = objects[i][1];
     if (object.x < x && x < object.x + 8 && object.y < y && y < object.y + 16) {
