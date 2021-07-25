@@ -106,6 +106,8 @@
         <li>(Hopefully) accurate reproduction of the deduplicated tiles appears under "Tiles".</li>
         <li>If there are to be other tiles loaded in the game the actor is in, set the "Tile number offset" appropriately.</li>
         <li>If there is a blank "remover tile" for removing all other blank tiles in the image (through deduplication) at the beginning, the "Tile number offset" can be set to -2.</li>
+        <li>A list of meta-sprites is displayed to the right of the preview area. The currently selected meta-sprite is highlighted in orange.</li>
+        <li>The current meta-sprite's name can be edited using the "Current Meta-Sprite Name" input. Please follow the label naming format: camelCase (e.g. <code>runLeft</code>, <code>jumping1</code>).</li>
         <li>Click "New Object" to add an object to the meta-sprite displayed on the left.</li>
         <li>Click on an object either in the meta-sprite preview or object table to select it.</li>
         <li>The currently selected object has a thicker red outline and is highlighted yellow in the object table.</li>
@@ -114,9 +116,10 @@
         <li>Object positions can also be set from the number inputs to the right.</li>
         <li>The object's tile number is set from the "tile" input on the right. Note that this number is in decimal, if hex is needed, it can be found from the object's entry in the object table (last value).</li>
         <li>Meta-sprite data can be exported via the "Export Data" button. Output will appear in the textarea.</li>
+        <li>The actor's position (solely for previewing) can be set with the "Actor X" and "Actor Y" inputs.</li>
         <li>A background image can be uploaded to appear behind the actor in the preview area in "Background image".</li>
         <li>The background image can be enabled/disabled at any time using the "Background enable" checkbox.</li>
-        <li>An 8x8 background grid will be drawn if the "Background grid" checkbox is checked.</li>
+        <li>An 8x8 background grid will be drawn if the "Grid" checkbox is checked.</li>
       </ul>
     </div>
     <script src="script.js" type="text/javascript" charset="utf-8"></script>
