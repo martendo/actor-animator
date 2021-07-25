@@ -252,6 +252,7 @@ canvas.addEventListener("mousedown", (event) => {
     const object = metasprites[currentMetasprite].objects[i];
     if (object.x < x && x < object.x + 8 && object.y < y && y < object.y + 16) {
       setCurrentObject(i);
+      drawObjects();
       dragObject = i;
       dragX = x - object.x;
       dragY = y - object.y;
