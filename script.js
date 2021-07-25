@@ -177,6 +177,31 @@ document.getElementById("removeMsBtn").addEventListener("click", () => {
   drawObjects();
 });
 
+document.getElementById("upMsBtn").addEventListener("click", () => {
+  if (currentMetasprite == null) {
+    return;
+  }
+  let newPos = 0;
+  if (currentMetasprite - 1 > 0) {
+    newPos = currentMetasprite - 1;
+  }
+  metasprites.splice(newPos, 0, metasprites.splice(currentMetasprite, 1)[0]);
+  createMetaspriteTable();
+  setCurrentMetasprite(newPos);
+});
+document.getElementById("downMsBtn").addEventListener("click", () => {
+  if (currentMetasprite == null) {
+    return;
+  }
+  let newPos = metasprites.length - 1;
+  if (currentMetasprite + 1 < metasprites.length - 1) {
+    newPos = currentMetasprite + 1;
+  }
+  metasprites.splice(newPos, 0, metasprites.splice(currentMetasprite, 1)[0]);
+  createMetaspriteTable();
+  setCurrentMetasprite(newPos);
+});
+
 const objectTable = document.getElementById("objectTable");
 let currentObject = null;
 
@@ -239,6 +264,33 @@ document.getElementById("removeBtn").addEventListener("click", () => {
   createObjectTable();
   setCurrentObject(newCurrentObject);
   drawObjects();
+});
+
+document.getElementById("upBtn").addEventListener("click", () => {
+  if (currentMetasprite == null || currentObject == null) {
+    return;
+  }
+  let newPos = 0;
+  if (currentObject - 1 > 0) {
+    newPos = currentObject - 1;
+  }
+  const objects = metasprites[currentMetasprite].objects;
+  objects.splice(newPos, 0, objects.splice(currentObject, 1)[0]);
+  createObjectTable();
+  setCurrentObject(newPos);
+});
+document.getElementById("downBtn").addEventListener("click", () => {
+  if (currentMetasprite == null || currentObject == null) {
+    return;
+  }
+  const objects = metasprites[currentMetasprite].objects;
+  let newPos = objects.length - 1;
+  if (currentObject + 1 < objects.length - 1) {
+    newPos = currentObject + 1;
+  }
+  objects.splice(newPos, 0, objects.splice(currentObject, 1)[0]);
+  createObjectTable();
+  setCurrentObject(newPos);
 });
 
 let dragObject = null;
