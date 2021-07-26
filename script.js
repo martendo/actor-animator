@@ -31,6 +31,7 @@ gfxCanvas.addEventListener("mousemove", (event) => {
   gfxCtx.globalAlpha = 1;
   gfxCtx.font = (pixelScale * 3).toString().concat("px monospace");
   gfxCtx.textAlign = "center";
+  const offset = currentMetasprite == null ? 0 : metasprites[currentMetasprite].offset;
   gfxCtx.fillText(
     hexify((y * gfxCanvas.width / pixelScale / 8 * 2 + x * 2 + offset) & 0xFF),
     (x * 8 + 4) * pixelScale, (y * 16 + 8) * pixelScale,
@@ -111,14 +112,6 @@ bgYInput.addEventListener("input", () => {
 });
 bgYInput.value = bgY;
 
-let offset = 0;
-const offsetInput = document.getElementById("offsetInput");
-offsetInput.addEventListener("input", () => {
-  offset = parseInt(offsetInput.value);
-  drawObjects();
-});
-offsetInput.value = offset;
-
 const scaleInput = document.getElementById("scaleInput");
 scaleInput.addEventListener("input", () => {
   pixelScale = parseInt(scaleInput.value);
@@ -153,10 +146,18 @@ nameInput.addEventListener("input", () => {
 });
 nameInput.value = "";
 
+const offsetInput = document.getElementById("offsetInput");
+offsetInput.addEventListener("input", () => {
+  metasprites[currentMetasprite].offset = parseInt(offsetInput.value);
+  drawObjects();
+});
+offsetInput.value = 0;
+
 document.getElementById("addMsBtn").addEventListener("click", () => {
   metasprites.push({
     name: "noname".concat(metasprites.length + 1),
     objects: [],
+    offset: 0,
   });
   createMetaspriteTable();
   setCurrentMetasprite(metasprites.length - 1);
@@ -460,6 +461,7 @@ function setCurrentMetasprite(num) {
   }
   document.getElementById("metasprite".concat(currentMetasprite)).classList.add("currentMetasprite");
   nameInput.value = metasprites[currentMetasprite].name;
+  offsetInput.value = metasprites[currentMetasprite].offset;
 }
 
 function createMetaspriteTable() {
@@ -495,10 +497,11 @@ function setCurrentObject(num) {
     return;
   }
   document.getElementById("object".concat(currentObject)).classList.add("currentObject");
-  const object = metasprites[currentMetasprite].objects[num];
+  const metasprite = metasprites[currentMetasprite];
+  const object = metasprite.objects[num];
   xInput.value = object.x;
   yInput.value = object.y;
-  tileInput.value = object.tile + offset;
+  tileInput.value = object.tile + metasprite.offset;
 }
 
 function createObjectTable() {
@@ -560,6 +563,7 @@ function drawObjects() {
   }
   
   const objects = getObjectsOrdered();
+  const offset = metasprites[currentMetasprite].offset;
   for (let i = 0; i < objects.length; i++) {
     const object = objects[i][0];
     const tileId = Math.floor((object.tile - offset) / 2);
