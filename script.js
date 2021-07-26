@@ -141,6 +141,9 @@ let currentMetasprite = null;
 
 const nameInput = document.getElementById("nameInput");
 nameInput.addEventListener("input", () => {
+  if (currentMetasprite == null) {
+    return;
+  }
   metasprites[currentMetasprite].name = nameInput.value;
   createMetaspriteTable();
 });
@@ -148,6 +151,9 @@ nameInput.value = "";
 
 const offsetInput = document.getElementById("offsetInput");
 offsetInput.addEventListener("input", () => {
+  if (currentMetasprite == null) {
+    return;
+  }
   metasprites[currentMetasprite].offset = parseInt(offsetInput.value);
   drawObjects();
 });
