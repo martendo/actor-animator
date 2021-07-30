@@ -343,7 +343,25 @@ document.addEventListener("mousemove", (event) => {
 });
 
 document.getElementById("exportButton").addEventListener("click", () => {
-  let result = "";
+  let result = `; REMEMBER TO REPLACE THE THINGS IN <> ANGLE BRACKETS!!!
+; Casing should follow how it appears in the angle brackets. Examples:
+; <Game Name>  : Skater Dude
+; <Actor Name> : Oil Barrel
+; <ActorName>  : OilBarrel
+; Select All (Ctrl + A) before copying to make sure you get everything!
+; ALSO REMEMBER TO DELETE THESE COMMENT LINES!!! Thanks :)
+INCLUDE "constants/actors.inc"
+INCLUDE "macros/actors.inc"
+
+SECTION "<Game Name> <Actor Name> Actor Animation Data", ROMX
+
+xActor<ActorName>Animation::
+    animation <ActorName>
+
+SECTION "<Game Name> <Actor Name> Actor Meta-Sprite Data", ROMX
+
+xActor<ActorName>Metasprites::
+`;
   for (const metasprite of metasprites) {
     result += "    metasprite .".concat(metasprite.name).concat("\n");
   }
