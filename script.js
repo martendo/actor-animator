@@ -365,7 +365,7 @@ document.getElementById("exportButton").addEventListener("click", () => {
         window.alert(`Object ${i} of meta-sprite "${metasprite.name}"'s tile number is not 8-bit (expected -128 <= ${object.y} < 256)`);
         return;
       }
-      result += `    DB ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
+      result += `    obj ${object.y}, ${object.x}, ${hexify(object.tile)}, 0\n`;
     }
     result += "    DB METASPRITE_END\n";
   }
