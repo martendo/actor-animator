@@ -370,7 +370,7 @@ xActor<ActorName>Metasprites::
     result += ".".concat(metasprite.name).concat("\n");
     for (let i = 0; i < metasprite.objects.length; i++) {
       const object = metasprite.objects[i];
-      if (object.y === -128 || object.y === 128) {
+      if (object.y + 16 === -128 || object.y + 16 === 128) {
         window.alert(`Object ${i} of meta-sprite "${metasprite.name}" has an invalid Y position of ${object.y} (value is reserved for METASPRITE_END)`);
         return;
       } else if (object.x < -128 || object.x >= 256) {
